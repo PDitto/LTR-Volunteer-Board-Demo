@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TXM Rebuild Volunteer Board</title>
+<style>
+:root{--navy:#17324d;--ink:#1d2733;--mute:#5d6b7a;--line:#d9dee4;--bg:#f5f3ee;--card:#fff;--accent:#b8501a;--ok:#1f7a4d;--okbg:#e4f3ea;--warn:#8a5a00;--warnbg:#fdf1d3;--bad:#a12a2a;--badbg:#fbe5e3;--info:#1d4f8f;--infobg:#e3edf9}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:var(--navy);color:#fff;padding:14px 18px 0}
+.wrap{max-width:1080px;margin:0 auto}
+h1{font-size:20px;margin:0 0 2px;letter-spacing:.2px}
+.sub{color:#c6d2de;font-size:13px;margin-bottom:10px}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav button{background:transparent;border:0;color:#c6d2de;font:inherit;font-weight:600;padding:9px 14px;border-radius:8px 8px 0 0;cursor:pointer}
+nav button.on{background:var(--bg);color:var(--navy)}
+main{padding:18px}
+h2{font-size:19px;margin:4px 0 10px;color:var(--navy)}
+h3{font-size:16px;margin:0 0 4px}
+p{margin:0 0 10px}
+.mute{color:var(--mute);font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px}
+.grid .card{margin:0;display:flex;flex-direction:column}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.sp{justify-content:space-between}
+.pill{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px;background:#e9edf1;color:#3b4856;white-space:nowrap}
+.pill.ok{background:var(--okbg);color:var(--ok)}.pill.warn{background:var(--warnbg);color:var(--warn)}.pill.bad{background:var(--badbg);color:var(--bad)}.pill.info{background:var(--infobg);color:var(--info)}
+.bar{height:8px;background:#e6e9ed;border-radius:99px;overflow:hidden;margin:8px 0 4px}
+.bar i{display:block;height:100%;background:var(--ok)}
+.facts{list-style:none;margin:8px 0;padding:0;font-size:14px}
+.facts li{padding:2px 0}
+.facts b{font-weight:600}
+button.b,a.b{font:inherit;font-weight:600;border:1px solid var(--navy);background:var(--navy);color:#fff;border-radius:8px;padding:8px 14px;cursor:pointer;text-decoration:none;display:inline-block}
+button.b.alt{background:#fff;color:var(--navy)}
+button.b.go{background:var(--accent);border-color:var(--accent)}
+button.b.sm{padding:4px 10px;font-size:13px}
+button.b.danger{background:#fff;color:var(--bad);border-color:var(--bad)}
+button.b:disabled{opacity:.5;cursor:default}
+button.link{background:none;border:0;color:var(--info);font:inherit;cursor:pointer;padding:0;text-decoration:underline}
+label{display:block;font-size:13px;font-weight:600;color:#3b4856;margin-bottom:8px}
+input[type=text],input[type=email],input[type=tel],input[type=number],input[type=date],input[type=password],select,textarea{display:block;width:100%;font:inherit;padding:7px 9px;border:1px solid #b9c2cc;border-radius:7px;background:#fff;margin-top:3px}
+textarea{min-height:70px}
+.f2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 12px}
+.chk{display:flex;gap:6px;align-items:center;font-weight:500}
+.tblwrap{overflow-x:auto;margin:8px 0}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--mute);padding:6px 8px;border-bottom:2px solid var(--line);white-space:nowrap}
+td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+td input[type=text],td input[type=email],td input[type=number]{min-width:120px;margin:0}
+td.c{text-align:center}
+.note{border-left:4px solid var(--info);background:var(--infobg);padding:9px 12px;border-radius:6px;font-size:14px;margin:0 0 12px}
+.note.warn{border-color:#d19a1c;background:var(--warnbg)}.note.bad{border-color:var(--bad);background:var(--badbg)}.note.ok{border-color:var(--ok);background:var(--okbg)}
+.tray{position:sticky;bottom:0;background:var(--navy);color:#fff;border-radius:12px 12px 0 0;padding:12px 16px;margin-top:14px}
+pre{white-space:pre-wrap;background:#f3f5f7;border:1px solid var(--line);border-radius:8px;padding:10px;font-size:13px;margin:8px 0;overflow-x:auto}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#1d2733;color:#fff;padding:10px 16px;border-radius:8px;display:none;max-width:90vw;z-index:9;font-size:14px}
+#toast.bad{background:var(--bad)}
+.demo{background:#fff4d6;border-bottom:1px solid #e6c768;padding:8px 18px;font-size:14px}
+.demo input{display:inline-block;width:auto;margin:0 6px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tabs button{font:inherit;font-weight:600;border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 14px;cursor:pointer;color:var(--navy)}
+.tabs button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.steps{display:flex;gap:6px;flex-wrap:wrap;font-size:13px;margin:6px 0}
+.steps span{padding:2px 8px;border-radius:6px;background:#eef1f4}
+.steps span.y{background:var(--okbg);color:var(--ok)}.steps span.n{background:var(--warnbg);color:var(--warn)}.steps span.x{background:var(--badbg);color:var(--bad)}
+@media (max-width:560px){main{padding:12px}.card{padding:12px}}
+</style>
+</head>
+<body>
+<div id="demobar"></div>
+<header><div class="wrap">
+  <h1>TXM Rebuild Volunteer Board</h1>
+  <div class="sub">Texans on Mission Disaster Relief · Long-Term Recovery</div>
+  <nav id="nav"></nav>
+</div></header>
+<main><div class="wrap" id="app"><p class="mute">Loading…</p></div></main>
+<div id="toast" role="status"></div>
+<!--DEMO-->
+<script>
+var BOOT = /*BOOT*/{};
+var DEMO = !(window.google && google.script && google.script.run);
+var st = { view: 'needs', board: null, picks: {}, filt: { q: '', month: '', lodging: false }, org: { name: '', pocName: '', pocEmail: '', pocPhone: '' },
+  token: BOOT.t || '', poc: null, edit: {}, auth: null, staff: null, stab: 'requests', open: {}, form: null, busy: false, done: null, linkEmail: '', login: { email: '', code: '' }, clr: { name: '', email: '', expires: '', bulk: '' }, notes: {}, hc: {} };
+try { if (!st.token) st.token = localStorage.getItem('ltr_t') || ''; } catch (e) {}
+if (st.token) st.view = 'mine';
+
+function esc(s) { return String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function nice(iso) { var p = String(iso || '').split('-'); return p.length < 3 ? '' : MON[+p[1] - 1] + ' ' + (+p[2]) + ', ' + p[0]; }
+function range(a, b) { var x = a.split('-'), y = b.split('-'); if (a === b) return nice(a); return x[1] === y[1] ? MON[+x[1] - 1] + ' ' + (+x[2]) + '–' + (+y[2]) + ', ' + x[0] : MON[+x[1] - 1] + ' ' + (+x[2]) + ' – ' + nice(b); }
+function addDays(iso, n) { var p = iso.split('-'); return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]) + n * 864e5).toISOString().slice(0, 10); }
+function toast(msg, bad) { var t = document.getElementById('toast'); t.textContent = msg; t.className = bad ? 'bad' : ''; t.style.display = 'block'; clearTimeout(toast.t); toast.t = setTimeout(function () { t.style.display = 'none'; }, bad ? 6500 : 3200); }
+function setPath(path, val) { var p = path.split('.'), o = st; for (var i = 0; i < p.length - 1; i++) { if (o[p[i]] === undefined) o[p[i]] = {}; o = o[p[i]]; } o[p[p.length - 1]] = val; }
+
+function call(action, payload) {
+  return new Promise(function (res, rej) {
+    if (DEMO) {
+      setTimeout(function () {
+        try { res(JSON.parse(JSON.stringify(window.demoApp.api(action, payload)))); if (window.demoRefresh) window.demoRefresh(); }
+        catch (e) { if (!e.user) console.error(e); rej(e.user ? e.message : 'Something went wrong.'); }
+      }, 80);
+    } else {
+      google.script.run.withSuccessHandler(function (s) { var r = JSON.parse(s); if (r.ok) res(r.data); else rej(r.error); })
+        .withFailureHandler(function () { rej('Could not reach the server. Try again.'); }).api(action, payload);
+    }
+  });
+}
+function run(action, payload, okMsg, then) {
+  if (st.busy) return; st.busy = true; document.body.style.cursor = 'progress';
+  call(action, payload).then(function (d) { st.busy = false; document.body.style.cursor = ''; if (okMsg) toast(okMsg); then && then(d); render(); })
+    .catch(function (m) { st.busy = false; document.body.style.cursor = ''; toast(m, true); });
+}
+function A(extra) { var o = { email: st.auth.email, code: st.auth.code }; for (var k in extra) o[k] = extra[k]; return o; }
+
+/* ---------- loading ---------- */
+function loadBoard() { call('board').then(function (d) { st.board = d; render(); }).catch(function (m) { toast(m, true); }); }
+function loadPoc() {
+  if (!st.token) return;
+  call('poc.home', { token: st.token }).then(function (d) { setPoc(d); try { localStorage.setItem('ltr_t', st.token); } catch (e) {} render(); })
+    .catch(function (m) { st.token = ''; st.poc = null; try { localStorage.removeItem('ltr_t'); } catch (e) {} toast(m, true); render(); });
+}
+function setPoc(d) {
+  st.poc = d; st.edit = {}; st.org = { name: d.org.name, pocName: d.org.pocName, pocEmail: d.org.pocEmail, pocPhone: d.org.pocPhone };
+  d.commitments.forEach(function (c) { st.edit[c.id] = { people: c.people.map(function (p) { return Object.assign({}, p); }), arrival: c.arrival, vehicles: c.vehicles, tools: c.tools, mealsNote: c.mealsNote, change: '', confirmCancel: false }; });
+}
+function setStaff(d) {
+  st.staff = d;
+  d.requests.forEach(function (r) { r.commitments.forEach(function (c) { st.edit[c.id] = { people: c.people.map(function (p) { return Object.assign({}, p); }) }; if (st.hc[c.id] === undefined) st.hc[c.id] = c.headcount; }); });
+}
+
+/* ---------- shared pieces ---------- */
+function statusPill(s) {
+  var m = { pending: ['Waiting for approval', 'warn'], approved: ['Confirmed', 'ok'], waitlist: ['Waitlist', 'info'], declined: ['Not confirmed', 'bad'], cancelled: ['Cancelled', ''], posted: ['Posted', 'ok'], closed: ['Closed', ''] };
+  var x = m[s] || [s, '']; return '<span class="pill ' + x[1] + '">' + esc(x[0]) + '</span>';
+}
+function bedBadge(p) {
+  if (p.bed === 'txm') return '<span class="pill ok">TXM bed: check cleared</span>';
+  if (p.bed === 'own') return '<span class="pill bad">' + (p.note ? 'Check expires before trip ends' : 'No cleared check') + ': needs own lodging</span>';
+  return p.cleared ? '<span class="pill">Own lodging · check on file</span>' : '<span class="pill">Own lodging</span>';
+}
+function readySteps(rd) {
+  function s(ok, t, cls) { return '<span class="' + (ok ? 'y' : (cls || 'n')) + '">' + (ok ? '✓ ' : '') + esc(t) + '</span>'; }
+  return '<div class="steps">' + s(rd.roster >= rd.headcount, 'Roster ' + rd.roster + '/' + rd.headcount) + s(rd.roster > 0 && rd.waivers >= rd.roster, 'Waivers ' + rd.waivers + '/' + rd.roster) +
+    (rd.lodgingWanted ? s(rd.ownLodging === 0, 'TXM beds ' + rd.beds + '/' + rd.lodgingWanted + ' cleared', 'x') : '<span>No TXM lodging requested</span>') + s(rd.details, 'Arrival details') + '</div>';
+}
+function rosterTable(cid, max, editable, showHours) {
+  var e = st.edit[cid], rows = e.people.map(function (p, i) {
+    var k = 'edit.' + cid + '.people.' + i + '.';
+    if (!editable) return '<tr><td>' + esc(p.name) + (p.minor ? ' <span class="pill">minor</span>' : '') + '</td><td>' + esc(p.email) + '</td><td class="c">' + (p.waiver ? '✓' : '<span class="pill warn">missing</span>') + '</td><td>' + bedBadge(p) + '</td><td>' + esc(p.diet) + '</td>' +
+      (showHours ? '<td><input type="number" min="0" step="0.5" style="width:80px;min-width:0" value="' + esc(p.hours || '') + '" data-hours="' + esc(p.id) + '" aria-label="Hours for ' + esc(p.name) + '"></td>' : '') + '</tr>';
+    return '<tr><td><input type="text" data-k="' + k + 'name" value="' + esc(p.name) + '" aria-label="Name"></td><td><input type="email" data-k="' + k + 'email" value="' + esc(p.email) + '" aria-label="Email"></td>' +
+      '<td class="c"><input type="checkbox" data-k="' + k + 'minor"' + (p.minor ? ' checked' : '') + ' aria-label="Minor"></td><td class="c"><input type="checkbox" data-k="' + k + 'waiver"' + (p.waiver ? ' checked' : '') + ' aria-label="Waiver signed"></td>' +
+      '<td class="c"><input type="checkbox" data-k="' + k + 'lodging"' + (p.lodging ? ' checked' : '') + ' aria-label="Needs TXM lodging"></td><td>' + (p.id ? bedBadge(p) : '<span class="mute">Save to check</span>') + '</td>' +
+      '<td><input type="text" data-k="' + k + 'diet" value="' + esc(p.diet) + '" aria-label="Dietary needs"></td><td><button class="link" data-act="rmPerson" data-cid="' + cid + '" data-i="' + i + '">Remove</button></td></tr>';
+  }).join('');
+  var head = editable ? '<th>Name</th><th>Email</th><th>Minor</th><th>Waiver signed</th><th>Needs TXM lodging</th><th>Housing</th><th>Dietary needs</th><th></th>'
+    : '<th>Name</th><th>Email</th><th>Waiver</th><th>Housing</th><th>Dietary needs</th>' + (showHours ? '<th>Hours</th>' : '');
+  return '<div class="tblwrap"><table><thead><tr>' + head + '</tr></thead><tbody>' + (rows || '<tr><td colspan="8" class="mute">No names yet.</td></tr>') + '</tbody></table></div>' +
+    (editable ? '<button class="b alt sm" data-act="addPerson" data-cid="' + cid + '"' + (e.people.length >= max ? ' disabled' : '') + '>+ Add person</button> <span class="mute">' + e.people.length + ' of ' + max + '</span>' : '');
+}
+
+/* ---------- Open needs ---------- */
+function vNeeds() {
+  if (!st.board) return '<p class="mute">Loading open needs…</p>';
+  if (st.done) return vDone();
+  var f = st.filt, months = {}, list = st.board.requests;
+  list.forEach(function (r) { months[r.startDate.slice(0, 7)] = 1; });
+  var shown = list.filter(function (r) {
+    if (f.month && r.startDate.slice(0, 7) !== f.month) return false;
+    if (f.lodging && !r.lodgingBeds) return false;
+    var q = f.q.toLowerCase(); return !q || (r.project + ' ' + r.city + ' ' + r.county + ' ' + r.skills).toLowerCase().indexOf(q) >= 0;
+  });
+  var h = '<h2>Open volunteer needs</h2><p class="mute">Pick one or more projects, tell us how many people you can bring, and send your sign-up. You can sign up for several projects on different dates. A sign-up is confirmed when the Rebuild Project Manager approves it.</p>' +
+    '<div class="card"><div class="f2"><label>Search<input type="text" data-k="filt.q" data-live="1" value="' + esc(f.q) + '" placeholder="City, county, skill"></label>' +
+    '<label>Month<select data-k="filt.month" data-live="1"><option value="">All months</option>' + Object.keys(months).sort().map(function (m) { return '<option value="' + m + '"' + (f.month === m ? ' selected' : '') + '>' + MON[+m.slice(5) - 1] + ' ' + m.slice(0, 4) + '</option>'; }).join('') + '</select></label>' +
+    '<label class="chk" style="align-self:end;padding-bottom:10px"><input type="checkbox" data-k="filt.lodging" data-live="1"' + (f.lodging ? ' checked' : '') + '> TXM lodging available</label></div></div>';
+  if (!shown.length) h += '<div class="card"><p>No open needs match right now. Check back soon.</p></div>';
+  h += '<div class="grid">' + shown.map(function (r) {
+    var pk = st.picks[r.id], full = r.remaining <= 0, pct = Math.min(100, Math.round(r.filled / r.need * 100));
+    return '<div class="card"><div class="row sp"><h3>' + esc(r.project) + '</h3>' + (full ? '<span class="pill info">Full · waitlist open</span>' : '<span class="pill ok">' + r.remaining + ' spots open</span>') + '</div>' +
+      '<div class="mute">' + esc(r.city) + ' · ' + esc(r.county) + ' County</div>' +
+      '<div style="font-weight:600;margin-top:6px">' + range(r.startDate, r.endDate) + ' · ' + r.days + ' day' + (r.days > 1 ? 's' : '') + '</div>' +
+      '<div class="bar"><i style="width:' + pct + '%"></i></div><div class="mute">' + r.filled + ' of ' + r.need + ' volunteers confirmed' + (r.waitlist ? ' · ' + r.waitlist + ' on waitlist' : '') + '</div>' +
+      '<ul class="facts">' + (r.skills ? '<li><b>Skills:</b> ' + esc(r.skills) + '</li>' : '') +
+      '<li><b>Lodging:</b> ' + (r.lodgingBeds ? 'TXM housing, ' + r.lodgingBeds + ' beds. Background check required.' : 'Not provided. Bring your own.') + '</li>' +
+      (r.meals ? '<li><b>Meals:</b> ' + esc(r.meals) + '</li>' : '') + (r.minAge ? '<li><b>Minimum age:</b> ' + r.minAge + '</li>' : '') + (r.notes ? '<li>' + esc(r.notes) + '</li>' : '') + '</ul>' +
+      '<div style="margin-top:auto">' + (pk ? '<div class="f2"><label>People you will bring<input type="number" min="1" data-k="picks.' + r.id + '.headcount" value="' + esc(pk.headcount) + '"></label>' +
+        (r.lodgingBeds ? '<label>How many need TXM lodging<input type="number" min="0" data-k="picks.' + r.id + '.lodgingCount" value="' + esc(pk.lodgingCount) + '"></label>' : '') + '</div>' +
+        '<button class="b alt sm" data-act="unpick" data-id="' + r.id + '">Remove from my sign-up</button>'
+        : '<button class="b' + (full ? ' alt' : '') + '" data-act="pick" data-id="' + r.id + '">' + (full ? 'Join the waitlist' : 'Add to my sign-up') + '</button>') + '</div></div>';
+  }).join('') + '</div>';
+  var ids = Object.keys(st.picks);
+  if (ids.length) {
+    var o = st.org;
+    h += '<div class="card" id="signup" style="margin-top:14px;border-color:var(--navy)"><h2>Send your sign-up (' + ids.length + ' project' + (ids.length > 1 ? 's' : '') + ')</h2>' +
+      '<div class="f2"><label>Church or organization<input type="text" data-k="org.name" value="' + esc(o.name) + '"></label><label>Contact person<input type="text" data-k="org.pocName" value="' + esc(o.pocName) + '"></label>' +
+      '<label>Contact email<input type="email" data-k="org.pocEmail" value="' + esc(o.pocEmail) + '"></label><label>Contact phone<input type="tel" data-k="org.pocPhone" value="' + esc(o.pocPhone) + '"></label></div>' +
+      '<div class="note">Roster and headcount are final ' + st.board.cutoff + ' days before arrival. Only people with a completed background check can stay in TXM housing. The site address is sent ' + st.board.handoff + ' days before arrival.</div>' +
+      '<button class="b go" data-act="signup">Send sign-up</button></div>';
+  }
+  return h;
+}
+function vDone() {
+  var d = st.done;
+  return '<div class="card"><h2>Sign-up received</h2><div class="tblwrap"><table><tbody>' + d.results.map(function (r) { return '<tr><td>' + esc(r.project) + '</td><td>' + nice(r.startDate) + '</td><td>' + statusPill(r.status) + '</td></tr>'; }).join('') + '</tbody></table></div>' +
+    '<p>We emailed a private link to <b>' + esc(d.emailed) + '</b>. Use it to enter your roster and manage your sign-ups. The Rebuild Project Manager will review each sign-up and email you.</p>' +
+    '<div class="row">' + (st.token ? '<button class="b" data-act="go" data-v="mine">Go to my sign-ups</button>' : '') + '<button class="b alt" data-act="doneOk">Back to open needs</button></div></div>';
+}
+
+/* ---------- My sign-ups ---------- */
+function vMine() {
+  if (!st.token) return '<h2>My sign-ups</h2><div class="card"><p>Each church gets a private link by email when it signs up. Open that link to manage your rosters.</p>' +
+    '<label>Lost the link? Enter the contact email and we will send it again.<input type="email" data-k="linkEmail" value="' + esc(st.linkEmail) + '"></label><button class="b" data-act="sendLink">Email me my link</button>' +
+    (DEMO ? '<p class="mute" style="margin-top:12px">Demo: <button class="link" data-act="demoPoc">open the sample church</button></p>' : '') + '</div>';
+  if (!st.poc) return '<p class="mute">Loading your sign-ups…</p>';
+  var d = st.poc, h = '<div class="row sp"><h2>' + esc(d.org.name) + '</h2><button class="link" data-act="pocOut">Not you? Sign out</button></div><p class="mute">Contact: ' + esc(d.org.pocName) + ' · ' + esc(d.org.pocEmail) + ' · ' + esc(d.org.pocPhone) + '</p>';
+  if (!d.commitments.length) h += '<div class="card">No sign-ups yet. <button class="link" data-act="go" data-v="needs">See open needs</button></div>';
+  d.commitments.forEach(function (c) {
+    var r = c.request, e = st.edit[c.id], live = /^(pending|approved|waitlist)$/.test(c.status), editable = live && !c.locked;
+    h += '<div class="card"><div class="row sp"><h3>' + esc(r.project) + '</h3>' + statusPill(c.status) + '</div>' +
+      '<div class="mute">' + esc(r.city) + ' · ' + esc(r.county) + ' County</div><div style="font-weight:600;margin:6px 0">' + range(r.startDate, r.endDate) + ' · ' + c.headcount + ' people</div>';
+    if (!live) { h += '</div>'; return; }
+    if (c.status === 'waitlist') h += '<div class="note">You are on the waitlist. We will contact you if a spot opens.</div>';
+    if (c.status === 'pending') h += '<div class="note warn">Waiting for approval. You can start your roster now.</div>';
+    h += c.locked ? '<div class="note bad"><b>Roster is final.</b> We are inside ' + d.cutoff + ' days of arrival. To report a change, use "Request a change" below.</div>'
+      : '<div class="note">Roster and headcount are final on <b>' + nice(c.cutoffDate) + '</b> (' + (r.daysOut - d.cutoff) + ' days from now).</div>';
+    if (c.site) h += '<div class="note ok"><b>Your Site Lead:</b> ' + esc(c.site.siteLead) + ' · ' + esc(c.site.siteLeadEmail) + ' · ' + esc(c.site.siteLeadPhone) + '<br><b>Site address:</b> ' + esc(c.site.address || 'Your Site Lead will send it') + (c.site.lodgingAddress ? '<br><b>Lodging address:</b> ' + esc(c.site.lodgingAddress) : '') + '</div>';
+    h += readySteps(c.ready) + rosterTable(c.id, c.headcount, editable, false);
+    if (c.ready.ownLodging) h += '<div class="note bad" style="margin-top:10px">' + c.ready.ownLodging + ' person(s) asked for TXM lodging but have no completed background check on file. They cannot stay in TXM housing until the check clears.</div>';
+    if (editable) {
+      var k = 'edit.' + c.id + '.';
+      h += '<div class="f2" style="margin-top:12px"><label>Arrival day and time<input type="text" data-k="' + k + 'arrival" value="' + esc(e.arrival) + '"></label><label>Vehicles<input type="text" data-k="' + k + 'vehicles" value="' + esc(e.vehicles) + '"></label>' +
+        '<label>Tools you are bringing<input type="text" data-k="' + k + 'tools" value="' + esc(e.tools) + '"></label><label>Meal notes<input type="text" data-k="' + k + 'mealsNote" value="' + esc(e.mealsNote) + '"></label></div>' +
+        '<button class="b go" data-act="pocSave" data-cid="' + c.id + '">Save roster and details</button>';
+    } else if (c.arrival) h += '<p class="mute">Arrival: ' + esc(c.arrival) + (c.vehicles ? ' · Vehicles: ' + esc(c.vehicles) : '') + (c.tools ? ' · Tools: ' + esc(c.tools) : '') + '</p>';
+    h += '<details style="margin-top:12px"><summary class="mute" style="cursor:pointer">Request a change or cancel</summary><label style="margin-top:8px">What changed?<textarea data-k="edit.' + c.id + '.change">' + esc(e.change) + '</textarea></label>' +
+      '<div class="row"><button class="b alt sm" data-act="pocChange" data-cid="' + c.id + '">Send change request</button>' +
+      (e.confirmCancel ? '<span>Cancel this sign-up?</span><button class="b danger sm" data-act="pocCancel" data-cid="' + c.id + '">Yes, cancel</button><button class="b alt sm" data-act="noCancel" data-cid="' + c.id + '">Keep it</button>'
+        : '<button class="b danger sm" data-act="askCancel" data-cid="' + c.id + '">Cancel this sign-up</button>') + '</div></details></div>';
+  });
+  return h;
+}
+
+/* ---------- Staff ---------- */
+function vStaff() {
+  if (!st.auth) return '<h2>Staff sign-in</h2><div class="card" style="max-width:420px"><label>Work email<input type="email" data-k="login.email" value="' + esc(st.login.email) + '"></label><label>Access code<input type="password" data-k="login.code" value="' + esc(st.login.code) + '"></label><button class="b" data-act="login">Sign in</button>' +
+    (DEMO ? '<p class="mute" style="margin-top:12px">Demo: sign in as <button class="link" data-act="demoStaff" data-e="pm@example.org" data-c="1111">Project Manager</button> · <button class="link" data-act="demoStaff" data-e="sitelead@example.org" data-c="3333">Site Lead</button></p>' : '') + '</div>';
+  if (!st.staff) return '<p class="mute">Loading…</p>';
+  var s = st.staff, u = s.user, tabs = [['requests', 'Requests'], ['new', st.form && st.form.id ? 'Edit request' : 'New request']];
+  if (u.lead) tabs.push(['flags', 'Flags (' + s.flags.length + ')'], ['clear', 'Background checks']);
+  var h = '<div class="row sp"><h2>' + esc(u.name) + ' <span class="pill">' + esc(u.role === 'pm' ? 'Project Manager' : u.role === 'coordinator' ? 'Coordinator' : 'Site Lead') + '</span></h2><button class="link" data-act="logout">Sign out</button></div>' +
+    '<div class="tabs">' + tabs.map(function (t) { return '<button data-act="stab" data-v="' + t[0] + '" class="' + (st.stab === t[0] ? 'on' : '') + '">' + esc(t[1]) + '</button>'; }).join('') + '</div>';
+  if (st.stab === 'new') return h + vReqForm();
+  if (st.stab === 'flags' && u.lead) return h + vFlags();
+  if (st.stab === 'clear' && u.lead) return h + vClear();
+  var groups = [['Needs your approval', function (r) { return u.lead && (r.status === 'pending' || r.pendingChange); }], ['Waiting for PM approval', function (r) { return !u.lead && (r.status === 'pending' || r.pendingChange); }],
+    ['Posted', function (r) { return r.status === 'posted' && !r.past && !(r.pendingChange); }], ['Past, closed or declined', function (r) { return r.status !== 'pending' && (r.past || r.status !== 'posted'); }]];
+  if (!s.requests.length) h += '<div class="card">No requests yet. Use "New request" to ask for volunteers.</div>';
+  groups.forEach(function (g) {
+    var rs = s.requests.filter(g[1]); if (!rs.length) return;
+    h += '<h3 style="margin:14px 0 8px">' + g[0] + ' (' + rs.length + ')</h3>' + rs.map(vReq).join('');
+  });
+  if (u.lead) h += '<p class="mute" style="margin-top:16px">Reminders, the ' + s.cutoff + '-day lock and the ' + s.handoff + '-day handoff are sent automatically each morning. <button class="link" data-act="runDaily">Run today\'s check now</button></p>';
+  return h;
+}
+function vReq(r) {
+  var u = st.staff.user, open = !!st.open[r.id], pend = r.commitments.filter(function (c) { return c.status === 'pending'; }).length;
+  var h = '<div class="card"><div class="row sp"><div><h3>' + esc(r.project) + '</h3><div class="mute">' + esc(r.city) + ' · ' + esc(r.county) + ' County · ' + range(r.startDate, r.endDate) + ' · Site Lead ' + esc(r.siteLead) + '</div></div>' +
+    '<div class="row">' + statusPill(r.status) + (r.pendingChange ? '<span class="pill warn">Change waiting</span>' : '') + (r.status === 'posted' && !r.past ? '<span class="pill' + (r.handedOff ? ' ok' : r.locked ? ' bad' : '') + '">' + (r.handedOff ? 'Handed off' : r.locked ? 'Locked' : r.daysOut + ' days out') + '</span>' : '') + (pend ? '<span class="pill warn">' + pend + ' to review</span>' : '') + '</div></div>' +
+    '<div class="row" style="margin-top:6px;font-size:14px"><span><b>' + r.filled + '/' + r.need + '</b> volunteers</span><span><b>' + r.bedsUsed + '/' + r.lodgingBeds + '</b> TXM beds</span>' + (r.waitlist ? '<span><b>' + r.waitlist + '</b> on waitlist</span>' : '') +
+    '<button class="link" data-act="toggle" data-id="' + r.id + '">' + (open ? 'Hide details' : 'Show details') + '</button></div>';
+  if (u.lead && r.status === 'pending') h += '<div class="row" style="margin-top:10px"><button class="b go sm" data-act="decReq" data-id="' + r.id + '" data-w="post">Approve and post</button><button class="b danger sm" data-act="decReq" data-id="' + r.id + '" data-w="decline">Decline</button></div>';
+  if (r.pendingChange) {
+    var ch = Object.keys(r.pendingChange).filter(function (k) { return String(r.pendingChange[k]) !== String(r[k]); }).map(function (k) { return '<li><b>' + esc(k) + ':</b> ' + esc(r[k]) + ' → ' + esc(r.pendingChange[k]) + '</li>'; }).join('');
+    h += '<div class="note warn" style="margin-top:10px"><b>Change requested by the Site Lead.</b> The posted version stays live until approved.<ul style="margin:6px 0 0 18px;padding:0">' + (ch || '<li>No differences</li>') + '</ul>' +
+      (u.lead ? '<div class="row" style="margin-top:8px"><button class="b go sm" data-act="decReq" data-id="' + r.id + '" data-w="applyChange">Approve change</button><button class="b danger sm" data-act="decReq" data-id="' + r.id + '" data-w="rejectChange">Reject change</button></div>' : '') + '</div>';
+  }
+  if (!open) return h + '</div>';
+  h += '<ul class="facts"><li><b>Skills:</b> ' + esc(r.skills || 'n/a') + ' · <b>Meals:</b> ' + esc(r.meals || 'n/a') + ' · <b>Minimum age:</b> ' + (r.minAge || 'none') + '</li><li><b>Site address (not shown to partners until handoff):</b> ' + esc(r.address || 'not entered') + '</li><li><b>Lodging address:</b> ' + esc(r.lodgingAddress || 'not entered') + '</li>' + (r.notes ? '<li><b>Notes:</b> ' + esc(r.notes) + '</li>' : '') + '</ul>' +
+    '<div class="row">' + (r.status !== 'closed' && r.status !== 'declined' ? '<button class="b alt sm" data-act="editReq" data-id="' + r.id + '">' + (r.status === 'posted' && !u.lead ? 'Request a change' : 'Edit') + '</button>' : '') + (u.lead && r.status === 'posted' ? '<button class="b danger sm" data-act="decReq" data-id="' + r.id + '" data-w="close">Close request</button>' : '') + '</div>';
+  if (!u.lead && !r.handedOff && r.status === 'posted') h += '<div class="note" style="margin-top:10px">The Project Manager works with each church until ' + st.staff.handoff + ' days before arrival. Rosters and contacts appear here at handoff.</div>';
+  r.commitments.forEach(function (c) {
+    var live = /^(pending|approved|waitlist)$/.test(c.status);
+    h += '<div style="border-top:1px solid var(--line);margin-top:12px;padding-top:10px"><div class="row sp"><div><b>' + esc(c.org.name) + '</b> · ' + c.headcount + ' people' + (c.lodgingCount ? ' · ' + c.lodgingCount + ' want TXM lodging' : '') +
+      (c.org.pocName ? '<div class="mute">POC: ' + esc(c.org.pocName) + ' · ' + esc(c.org.pocEmail) + ' · ' + esc(c.org.pocPhone) + '</div>' : '') + (c.notes ? '<div class="mute">Note: ' + esc(c.notes) + '</div>' : '') + '</div>' + statusPill(c.status) + '</div>';
+    if (u.lead && (c.status === 'pending' || c.status === 'waitlist')) h += '<div class="row" style="margin-top:8px"><label style="margin:0">Approve for <input type="number" min="1" style="display:inline-block;width:70px" data-k="hc.' + c.id + '" value="' + esc(st.hc[c.id]) + '"> people</label><button class="b go sm" data-act="decCom" data-id="' + c.id + '" data-w="approve">Approve</button>' +
+      (c.status === 'pending' ? '<button class="b alt sm" data-act="decCom" data-id="' + c.id + '" data-w="waitlist">Move to waitlist</button>' : '') + '<button class="b danger sm" data-act="decCom" data-id="' + c.id + '" data-w="decline">Decline</button></div>';
+    if (live && (u.lead || r.handedOff)) {
+      h += readySteps(c.ready) + (c.arrival ? '<p class="mute">Arrival: ' + esc(c.arrival) + (c.vehicles ? ' · Vehicles: ' + esc(c.vehicles) : '') + (c.tools ? ' · Tools: ' + esc(c.tools) : '') + (c.mealsNote ? ' · Meals: ' + esc(c.mealsNote) : '') + '</p>' : '');
+      var started = r.daysOut <= 0;
+      h += rosterTable(c.id, c.headcount, u.lead && !started, started);
+      if (u.lead && !started) h += ' <button class="b sm" data-act="staffRoster" data-cid="' + c.id + '">Save roster' + (r.locked ? ' (after cutoff)' : '') + '</button>';
+      if (started && c.people.length) h += '<button class="b sm" data-act="saveHours" data-cid="' + c.id + '">Save hours</button>';
+    } else if (live) h += readySteps(c.ready);
+    h += '</div>';
+  });
+  if (!r.commitments.length) h += '<p class="mute" style="margin-top:10px">No sign-ups yet.</p>';
+  if (r.packet && r.status === 'posted') h += '<details style="margin-top:12px"><summary style="cursor:pointer;font-weight:600">Handoff packet</summary><pre id="pk-' + r.id + '">' + esc(r.packet) + '</pre><button class="b alt sm" data-act="copy" data-id="pk-' + r.id + '">Copy packet</button></details>';
+  return h + '</div>';
+}
+function vReqForm() {
+  var f = st.form || (st.form = { project: '', city: '', county: '', startDate: '', days: 5, need: 10, skills: '', lodgingBeds: 0, meals: '', minAge: 0, notes: '', address: '', lodgingAddress: '', siteLead: st.staff.user.name, siteLeadEmail: st.staff.user.email, siteLeadPhone: '' });
+  var u = st.staff.user, posted = f.id && f.status === 'posted';
+  function i(k, label, type, extra) { return '<label>' + label + '<input type="' + (type || 'text') + '" data-k="form.' + k + '" value="' + esc(f[k]) + '"' + (extra || '') + '></label>'; }
+  return '<div class="card"><h3>' + (f.id ? 'Edit: ' + esc(f.project) : 'New volunteer request') + '</h3>' +
+    (posted && !u.lead ? '<div class="note warn">This request is posted. Your change goes to the Project Manager for approval before partners see it.</div>' : !f.id ? '<div class="note">The Project Manager or Coordinator approves the request before partners can see it.</div>' : '') +
+    '<div class="f2">' + i('project', 'Project name') + i('city', 'City') + i('county', 'County') + i('startDate', 'Start date', 'date') + i('days', 'Number of days', 'number', ' min="1"') + i('need', 'Volunteers needed', 'number', ' min="1"') +
+    i('skills', 'Skills needed') + i('lodgingBeds', 'TXM lodging beds (0 if none)', 'number', ' min="0"') + i('meals', 'Meals provided') + i('minAge', 'Minimum age (0 if none)', 'number', ' min="0"') + '</div>' +
+    '<div class="f2">' + i('address', 'Site address (kept private until handoff)') + i('lodgingAddress', 'Lodging address') + '</div>' +
+    (u.lead ? '<div class="f2">' + i('siteLead', 'Site Lead name') + i('siteLeadEmail', 'Site Lead email', 'email') + i('siteLeadPhone', 'Site Lead phone', 'tel') + '</div>' : '<div class="f2">' + i('siteLeadPhone', 'Your phone (shared with churches at handoff)', 'tel') + '</div>') +
+    '<label>Notes for partners<textarea data-k="form.notes">' + esc(f.notes) + '</textarea></label>' +
+    '<div class="row"><button class="b go" data-act="saveReq">' + (f.id ? (posted && !u.lead ? 'Send change to PM' : 'Save changes') : 'Submit for approval') + '</button><button class="b alt" data-act="cancelForm">Cancel</button></div></div>';
+}
+function vFlags() {
+  var fl = st.staff.flags;
+  if (!fl.length) return '<div class="card">No open flags.</div>';
+  return '<p class="mute">Flags are changes that need a decision. Notify the Site Lead and decide whether to use the waitlist.</p>' + fl.map(function (f) {
+    return '<div class="card"><div class="row sp"><h3>' + esc(f.type) + '</h3><span class="mute">' + esc(String(f.createdAt).slice(0, 10)) + '</span></div><div class="mute">' + esc(f.project) + ' · starts ' + nice(f.startDate) + (f.org ? ' · ' + esc(f.org) : '') + ' · from ' + esc(f.by) + '</div><p style="margin-top:8px">' + esc(f.detail) + '</p>' +
+      '<label>What was decided<input type="text" data-k="notes.' + f.id + '" value="' + esc(st.notes[f.id] || '') + '"></label><button class="b sm" data-act="resolve" data-id="' + f.id + '">Mark resolved</button></div>';
+  }).join('');
+}
+function vClear() {
+  var c = st.clr, list = st.staff.clearances, today = st.staff.today;
+  return '<div class="note bad"><b>Rule:</b> only people with a completed background check can stay in TXM housing. A person gets a TXM bed only if they are on this list and the check is valid through the last night of the trip. Names and emails must match the church roster.</div>' +
+    '<div class="note">Record cleared status and expiration date only. Do not enter report details here.</div>' +
+    '<div class="card"><h3>Add a clearance</h3><div class="f2"><label>Full name<input type="text" data-k="clr.name" value="' + esc(c.name) + '"></label><label>Email<input type="email" data-k="clr.email" value="' + esc(c.email) + '"></label><label>Expires<input type="date" data-k="clr.expires" value="' + esc(c.expires) + '"></label></div><button class="b sm" data-act="addClr">Add</button>' +
+    '<details style="margin-top:12px"><summary style="cursor:pointer;font-weight:600">Paste a list</summary><label style="margin-top:8px">One person per line: Name, Email, Expiration (YYYY-MM-DD)<textarea data-k="clr.bulk" placeholder="Jane Smith, jane@church.org, 2028-05-01">' + esc(c.bulk) + '</textarea></label><button class="b sm" data-act="bulkClr">Import list</button></details></div>' +
+    '<div class="card"><h3>Cleared volunteers (' + list.length + ')</h3><div class="tblwrap"><table><thead><tr><th>Name</th><th>Email</th><th>Expires</th><th>Source</th><th></th></tr></thead><tbody>' +
+    (list.map(function (x) { var exp = x.expires < today; return '<tr><td>' + esc(x.name) + '</td><td>' + esc(x.email) + '</td><td>' + nice(x.expires) + (exp ? ' <span class="pill bad">expired</span>' : x.expires < addDays(today, 30) ? ' <span class="pill warn">expiring</span>' : '') + '</td><td>' + esc(x.source) + '</td><td><button class="link" data-act="delClr" data-id="' + x.id + '">Remove</button></td></tr>'; }).join('') || '<tr><td colspan="5" class="mute">None yet.</td></tr>') + '</tbody></table></div></div>';
+}
+
+/* ---------- render + events ---------- */
+function render() {
+  var tabs = [['needs', 'Open needs'], ['mine', 'My sign-ups'], ['staff', 'TXM staff']];
+  document.getElementById('nav').innerHTML = tabs.map(function (t) { return '<button data-act="go" data-v="' + t[0] + '" class="' + (st.view === t[0] ? 'on' : '') + '">' + t[1] + '</button>'; }).join('');
+  var keep = document.activeElement && document.activeElement.getAttribute && document.activeElement.getAttribute('data-k');
+  document.getElementById('app').innerHTML = st.view === 'needs' ? vNeeds() : st.view === 'mine' ? vMine() : vStaff();
+  if (keep) { var el = document.querySelector('[data-k="' + keep + '"]'); if (el) { el.focus(); try { var n = el.value.length; el.setSelectionRange(n, n); } catch (e) {} } }
+}
+document.addEventListener('input', function (ev) {
+  var el = ev.target, k = el.getAttribute && el.getAttribute('data-k'); if (!k) return;
+  setPath(k, el.type === 'checkbox' ? el.checked : el.value);
+  if (el.getAttribute('data-live')) render();
+});
+function staffReload(msg) { return function (d) { setStaff(d); }; }
+document.addEventListener('click', function (ev) {
+  var el = ev.target.closest ? ev.target.closest('[data-act]') : null; if (!el) return;
+  var a = el.getAttribute('data-act'), id = el.getAttribute('data-id'), cid = el.getAttribute('data-cid');
+  if (a === 'go') { st.view = el.getAttribute('data-v'); st.done = null; if (st.view === 'needs') loadBoard(); if (st.view === 'mine') loadPoc(); if (st.view === 'staff' && st.auth) run('staff.home', A(), '', setStaff); render(); }
+  else if (a === 'pick') { st.picks[id] = { headcount: '', lodgingCount: 0 }; render(); }
+  else if (a === 'unpick') { delete st.picks[id]; render(); }
+  else if (a === 'signup') {
+    var picks = Object.keys(st.picks).map(function (k) { return { requestId: k, headcount: st.picks[k].headcount, lodgingCount: st.picks[k].lodgingCount }; });
+    run('signup', { org: st.org, picks: picks }, '', function (d) { st.done = d; st.picks = {}; if (d.token) { st.token = d.token; try { localStorage.setItem('ltr_t', d.token); } catch (e) {} } loadBoard(); window.scrollTo(0, 0); });
+  }
+  else if (a === 'doneOk') { st.done = null; render(); }
+  else if (a === 'sendLink') run('sendLink', { email: st.linkEmail }, 'If that email has sign-ups, the link is on its way.');
+  else if (a === 'pocOut') { st.token = ''; st.poc = null; try { localStorage.removeItem('ltr_t'); } catch (e) {} render(); }
+  else if (a === 'addPerson') { st.edit[cid].people.push({ name: '', email: '', minor: false, lodging: false, waiver: false, diet: '' }); render(); }
+  else if (a === 'rmPerson') { st.edit[cid].people.splice(+el.getAttribute('data-i'), 1); render(); }
+  else if (a === 'pocSave') { var e = st.edit[cid]; run('poc.save', { token: st.token, commitmentId: cid, people: e.people, arrival: e.arrival, vehicles: e.vehicles, tools: e.tools, mealsNote: e.mealsNote }, 'Saved.', setPoc); }
+  else if (a === 'pocChange') run('poc.change', { token: st.token, commitmentId: cid, text: st.edit[cid].change }, 'Sent to the Project Manager and Coordinator.', function () { st.edit[cid].change = ''; });
+  else if (a === 'askCancel') { st.edit[cid].confirmCancel = true; render(); }
+  else if (a === 'noCancel') { st.edit[cid].confirmCancel = false; render(); }
+  else if (a === 'pocCancel') run('poc.cancel', { token: st.token, commitmentId: cid }, '', function (d) { toast(d.flagged ? 'We are inside the cutoff. Your request went to the Project Manager.' : 'Sign-up cancelled.'); loadPoc(); });
+  else if (a === 'login') { st.auth = { email: st.login.email, code: st.login.code }; call('staff.home', A()).then(function (d) { setStaff(d); st.login.code = ''; render(); }).catch(function (m) { st.auth = null; toast(m, true); }); }
+  else if (a === 'logout') { st.auth = null; st.staff = null; st.form = null; render(); }
+  else if (a === 'stab') { st.stab = el.getAttribute('data-v'); if (st.stab !== 'new') st.form = null; render(); }
+  else if (a === 'toggle') { st.open[id] = !st.open[id]; render(); }
+  else if (a === 'decReq') run('staff.decideRequest', A({ id: id, what: el.getAttribute('data-w') }), 'Done.', setStaff);
+  else if (a === 'decCom') run('staff.decideCommit', A({ id: id, what: el.getAttribute('data-w'), headcount: st.hc[id] }), 'Done. The church was emailed.', setStaff);
+  else if (a === 'staffRoster') run('staff.saveRoster', A({ commitmentId: cid, people: st.edit[cid].people }), 'Roster saved.', setStaff);
+  else if (a === 'saveHours') {
+    var ins = document.querySelectorAll('[data-hours]'), jobs = []; st.edit[cid].people.forEach(function (p) { for (var i = 0; i < ins.length; i++) if (ins[i].getAttribute('data-hours') === p.id) jobs.push(call('staff.hours', A({ rosterId: p.id, hours: ins[i].value }))); });
+    Promise.all(jobs).then(function () { toast('Hours saved.'); run('staff.home', A(), '', setStaff); }).catch(function (m) { toast(m, true); });
+  }
+  else if (a === 'editReq') { var r = st.staff.requests.filter(function (x) { return x.id === id; })[0]; st.form = Object.assign({}, r.pendingChange || {}, { id: r.id, status: r.status }); ['project', 'city', 'county', 'startDate', 'days', 'need', 'skills', 'lodgingBeds', 'meals', 'minAge', 'notes', 'address', 'lodgingAddress', 'siteLead', 'siteLeadEmail', 'siteLeadPhone'].forEach(function (k) { if (st.form[k] === undefined) st.form[k] = r[k]; }); st.stab = 'new'; render(); window.scrollTo(0, 0); }
+  else if (a === 'saveReq') run('staff.saveRequest', A({ request: st.form }), st.form.id ? 'Saved.' : 'Sent to the Project Manager and Coordinator for approval.', function (d) { setStaff(d); st.form = null; st.stab = 'requests'; });
+  else if (a === 'cancelForm') { st.form = null; st.stab = 'requests'; render(); }
+  else if (a === 'resolve') run('staff.resolveFlag', A({ id: id, note: st.notes[id] || '' }), 'Resolved.', setStaff);
+  else if (a === 'addClr') run('staff.clearance', A({ rows: [st.clr] }), 'Added.', function (d) { setStaff(d); st.clr = { name: '', email: '', expires: '', bulk: st.clr.bulk }; });
+  else if (a === 'bulkClr') { var rows = st.clr.bulk.split(/\n/).map(function (l) { var p = l.split(/,|\t/); return { name: (p[0] || '').trim(), email: (p[1] || '').trim(), expires: (p[2] || '').trim() }; }).filter(function (x) { return x.name; }); run('staff.clearance', A({ rows: rows }), rows.length + ' imported.', function (d) { setStaff(d); st.clr.bulk = ''; }); }
+  else if (a === 'delClr') run('staff.clearanceDelete', A({ id: id }), 'Removed.', setStaff);
+  else if (a === 'runDaily') run('staff.runDaily', A(), "Today's check ran.", setStaff);
+  else if (a === 'copy') { var t = document.getElementById(id).textContent; try { navigator.clipboard.writeText(t).then(function () { toast('Copied.'); }, function () { toast('Select the text and copy it.', true); }); } catch (e) { toast('Select the text and copy it.', true); } }
+  else if (a === 'demoStaff') { st.auth = { email: el.getAttribute('data-e'), code: el.getAttribute('data-c') }; run('staff.home', A(), '', setStaff); }
+  else if (a === 'demoPoc') { st.token = window.demoToken; loadPoc(); }
+  else if (window.demoAct) window.demoAct(a, el);
+});
+function start() { render(); loadBoard(); if (st.token) loadPoc(); }
+if (DEMO && !window.demoApp) document.getElementById('app').innerHTML = '<p>This page needs to run inside Google Apps Script.</p>'; else start();
+</script>
+</body>
+</html>
